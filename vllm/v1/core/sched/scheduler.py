@@ -440,7 +440,8 @@ class Scheduler(SchedulerInterface):
                 # With P/D + spec decode, an extra block can be allocated for a new
                 # request, causing a mismatch. Disable lookahead allocation when no
                 # tokens have been computed for the request yet.
-                effective_lookahead_tokens = 0 if request.num_computed_tokens == 0 else self.num_lookahead_tokens
+                effective_lookahead_tokens = (0 if request.num_computed_tokens == 0 
+                                             else self.num_lookahead_tokens)
                 
                 new_blocks = self.kv_cache_manager.allocate_slots(
                     request,
@@ -453,6 +454,7 @@ class Scheduler(SchedulerInterface):
                 if new_blocks is None:
                     # The request cannot be scheduled.
                     break
+
 
                 # KVTransfer: the connector uses this info to determine
                 # if a load is needed. Note that
